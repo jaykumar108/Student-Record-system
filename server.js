@@ -1,7 +1,8 @@
+require("dotenv").config(); // Load environment variables
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const pdfkit = require("pdfkit"); 
+const pdfkit = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
 
@@ -10,12 +11,19 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static("public")); // Serve static files
 
-// MongoDB Connection------------------------------------------------------DATABASE --------\\
-mongoose.connect("mongodb://localhost:27017/studentsDB")
-  .then(() => console.log("MongoDB Connected Successfully"))
-  .catch(err => console.error("MongoDB Connection Error:", err));
+// ✅ MongoDB Connection (Using Atlas)
+const mongoURI = process.env.MONGO_URI; // Get from .env
 
+mongoose.connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log("✅ MongoDB Connected Successfully!");
+}).catch(err => {
+    console.error("❌ MongoDB Connection Error:", err);
+});
 
+// Student Schema & Model
 const studentSchema = new mongoose.Schema({
     name: String,
     class: String,
@@ -28,44 +36,44 @@ const studentSchema = new mongoose.Schema({
 
 const Student = mongoose.model("Student", studentSchema);
 
-// Add Student------------------------------------->>
+// ✅ Add Student
 app.post("/add", async (req, res) => {
     try {
         const student = new Student(req.body);
         await student.save();
-        res.json({ message: "Student Added Successfully" });
+        res.json({ message: "✅ Student Added Successfully!" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// Get All Students-------------------------
+// ✅ Get All Students
 app.get("/students", async (req, res) => {
     const students = await Student.find();
     res.json(students);
 });
 
-// Update Student---------------------------------------|||||||||||
+// ✅ Update Student
 app.put("/update/:id", async (req, res) => {
     try {
         await Student.findByIdAndUpdate(req.params.id, req.body);
-        res.json({ message: "Student Updated Successfully" });
+        res.json({ message: "✅ Student Updated Successfully!" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// Delete Student-----------------------------
+// ✅ Delete Student
 app.delete("/delete/:id", async (req, res) => {
     try {
         await Student.findByIdAndDelete(req.params.id);
-        res.json({ message: "Student Deleted Successfully" });
+        res.json({ message: "✅ Student Deleted Successfully!" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// Search Student by Name, Mobile, or Email--------------------------------\\\\
+// ✅ Search Student by Name, Mobile, or Email
 app.get("/search", async (req, res) => {
     const query = req.query.q;
     const students = await Student.find({
@@ -78,11 +86,16 @@ app.get("/search", async (req, res) => {
     res.json(students);
 });
 
-// Generate Student PDF --------------------------------------------/
+// ✅ Generate Student PDF
 app.get("/print/:id", async (req, res) => {
     try {
         const student = await Student.findById(req.params.id);
-        if (!student) return res.status(404).send("Student Not Found");
+        if (!student) return res.status(404).send("❌ Student Not Found");
+
+        // Ensure "public" directory exists
+        if (!fs.existsSync(path.join(__dirname, "public"))) {
+            fs.mkdirSync(path.join(__dirname, "public"));
+        }
 
         const doc = new pdfkit();
         const pdfPath = path.join(__dirname, "public", `student_${student._id}.pdf`);
@@ -108,10 +121,11 @@ app.get("/print/:id", async (req, res) => {
     }
 });
 
-
-// Serve index.html---------------------------------------------------------///
+// ✅ Serve index.html
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "index.html"));
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+// ✅ Set Dynamic Port for Render Deployment
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
