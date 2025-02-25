@@ -14,14 +14,9 @@ app.use(express.static("public")); // Serve static files
 // ✅ MongoDB Connection (Using Atlas)
 const mongoURI = process.env.MONGO_URI; // Get from .env
 
-mongoose.connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log("✅ MongoDB Connected Successfully!");
-}).catch(err => {
-    console.error("❌ MongoDB Connection Error:", err);
-});
+mongoose.connect(mongoURI)
+    .then(() => console.log("✅ MongoDB Connected Successfully!"))
+    .catch(err => console.error("❌ MongoDB Connection Error:", err));
 
 // Student Schema & Model
 const studentSchema = new mongoose.Schema({
@@ -93,12 +88,13 @@ app.get("/print/:id", async (req, res) => {
         if (!student) return res.status(404).send("❌ Student Not Found");
 
         // Ensure "public" directory exists
-        if (!fs.existsSync(path.join(__dirname, "public"))) {
-            fs.mkdirSync(path.join(__dirname, "public"));
+        const publicDir = path.join(__dirname, "public");
+        if (!fs.existsSync(publicDir)) {
+            fs.mkdirSync(publicDir);
         }
 
         const doc = new pdfkit();
-        const pdfPath = path.join(__dirname, "public", `student_${student._id}.pdf`);
+        const pdfPath = path.join(publicDir, `student_${student._id}.pdf`);
         const stream = fs.createWriteStream(pdfPath);
 
         doc.pipe(stream);
