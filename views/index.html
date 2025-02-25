@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Records</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body><center>
+    <h1>Student Records  Management System</h1>
+
+    <input type="text" id="search" placeholder="Search by Name, Mobile, or Email">
+    <button onclick="searchStudent()">Search</button>
+
+    <form id="studentForm">
+        Name<input type="text" id="name" placeholder="Name"required>
+        <input type="text" id="class" placeholder="Class" required>
+        <input type="number" id="marks" placeholder="Mobile" required>
+        <input type="text" id="mobile" placeholder="PRN" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="text" id="address" placeholder="Address">
+        <input type="text" id="about" placeholder="About">
+        <button type="button" onclick="addStudent()">Add Student</button>
+    </form>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Mobile</th>
+                <th>PRN</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>About</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="studentTable"></tbody>
+    </table>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Student</h2>
+            <input type="hidden" id="editId">
+            <input type="text" id="editName" placeholder="Name">
+            <input type="text" id="editClass" placeholder="Class">
+            <input type="number" id="editMarks" placeholder="Mobile">
+            <input type="text" id="editMobile" placeholder="PRN">
+            <input type="email" id="editEmail" placeholder="Email">
+            <input type="text" id="editAddress" placeholder="Address">
+            <input type="text" id="editAbout" placeholder="About">
+            <button onclick="updateStudent()">Update</button>
+            <button onclick="document.getElementById('editModal').style.display='none'">Cancel</button>
+        </div>
+    </div>
+</center>
+    <script src="/script.js"></script>
+</body>
+</html>
