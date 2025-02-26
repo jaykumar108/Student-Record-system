@@ -1,4 +1,3 @@
-require("dotenv").config(); // Load environment variables
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -11,12 +10,15 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static("public")); // Serve static files
 
-// ✅ MongoDB Connection (Using Atlas)
-const mongoURI = process.env.MONGO_URI; // Get from .env
+// ✅ MongoDB Connection (Using Atlas) - Hardcoded Connection String
+const mongoURI = "mongodb+srv://jsharmadbg:kLYXtsTv431Sy2xO@cluster0.vvclx.mongodb.net/record-system?retryWrites=true&w=majority&appName=Cluster0"; 
 
-mongoose.connect(mongoURI)
-    .then(() => console.log("✅ MongoDB Connected Successfully!"))
-    .catch(err => console.error("❌ MongoDB Connection Error:", err));
+mongoose.connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log("✅ MongoDB Connected Successfully!"))
+.catch(err => console.error("❌ MongoDB Connection Error:", err));
 
 // Student Schema & Model
 const studentSchema = new mongoose.Schema({
@@ -125,4 +127,3 @@ app.get("/", (req, res) => {
 // ✅ Set Dynamic Port for Render Deployment
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-        
