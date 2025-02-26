@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.static("public")); // Serve static files
 
 // ✅ MongoDB Connection (Using Atlas) - Hardcoded Connection String
-const mongoURI = "mongodb+srv://jsharmadbg:kLYXtsTv431Sy2xO@cluster0.vvclx.mongodb.net/record-system?retryWrites=true&w=majority&appName=Cluster0"; 
+const mongoURI = "mongodb+srv://jsharmadbg:kLYXtsTv431Sy2xO@cluster0.vvclx.mongodb.net/record-system?retryWrites=true&w=majority&appName=Clusters"; 
 
 mongoose.connect(mongoURI, {
     useNewUrlParser: true,
