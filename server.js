@@ -13,7 +13,6 @@ app.use(express.static("public")); // Serve static files
 // ✅ MongoDB Connection (Using Atlas) - Hardcoded Connection String
 require('dotenv').config();  // ✅ Load environment variables FIRST
 
-const mongoose = require("mongoose");
 
 // ✅ MongoDB Connection (Using Atlas)
 mongoose.connect(process.env.MONGO_URI, {
