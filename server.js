@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.static("public")); // Serve static files
 
 // ✅ MongoDB Connection (Using Atlas) - Hardcoded Connection String
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect(process.env.MONGO_URI);
 
 const PORT =process.env.PORT
 require('dotenv').config()
