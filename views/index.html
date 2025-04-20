@@ -3,59 +3,1004 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Records</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Student Records Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --border-color: #ddd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: color 0.3s;
+        }
+
+        .nav-links button:hover {
+            color: var(--primary-color);
+        }
+
+        /* Auth Container */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center!important;
+            justify-content: center!important;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            position: relative;
+        }
+
+        .auth-form {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            animation: fadeIn 0.5s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-form h2 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .auth-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .auth-form input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .auth-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .auth-form button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+        }
+
+        .auth-form button:hover {
+            background: #45a049;
+        }
+
+        .auth-form .form-links {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--text-color);
+        }
+
+        .auth-form .form-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-form .form-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome-message h2 {
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        .search-container {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .search-container input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+
+        .search-container button {
+            padding: 12px 25px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-container button:hover {
+            background: #45a049;
+        }
+
+        /* Student Table */
+        .student-table {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .student-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .student-table th,
+        .student-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .student-table th {
+            background-color: var(--light-gray);
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .student-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .student-table td button {
+            padding: 8px 15px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .student-table .edit-btn {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .student-table .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .student-table .print-btn {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .student-table .edit-btn:hover {
+            background: #45a049;
+        }
+
+        .student-table .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .student-table .print-btn:hover {
+            background: #1976d2;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 25px;
+            color: var(--text-color);
+        }
+
+        .modal-content .form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal-content .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .modal-content .form-group input,
+        .modal-content .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .modal-content .form-group input:focus,
+        .modal-content .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+
+        .modal-content button {
+            padding: 12px 25px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-content button:hover {
+            background: #45a049;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-links button {
+                width: 100%;
+                text-align: center;
+            }
+
+            .search-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .search-container input {
+                width: 100%;
+            }
+
+            .student-table th,
+            .student-table td {
+                padding: 12px;
+            }
+
+            .student-table td button {
+                padding: 8px 12px;
+                margin: 5px;
+            }
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons button {
+            padding: 12px 25px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-buttons button:hover {
+            background: #45a049;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .badge-active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .badge-inactive {
+            background: #dc3545;
+            color: white;
+        }
+    </style>
 </head>
-<body><center>
-    <h1>Student Records  Management System</h1>
+<body>
+    <div class="container">
+        <center>
+            <div id="authContainer" class="auth-container">
+                <div id="loginForm" class="auth-form">
+                    <h2>Login</h2>
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password">
+                    </div>
+                    <button onclick="handleLogin()">Login</button>
+                <p class="form-links">Don't have an account? <a href="#" onclick="showSignupForm(); return false;">Sign up</a></p>
+            </div>
 
-    <input type="text" id="search" placeholder="Search by Name, Mobile, or Email">
-    <button onclick="searchStudent()">Search</button>
+            <div id="signupForm" class="auth-form" style="display: none;">
+                <h2>Sign Up</h2>
+                <div class="form-group">
+                    <label for="signupName">Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Enter your password">
+                </div>
+                <button onclick="handleSignup()">Sign Up</button>
+                <p class="form-links">Already have an account? <a href="#" onclick="showLoginForm(); return false;">Login</a></p>
+            </div>
+        </div>
+    </center>
 
-    <form id="studentForm">
-        Name<input type="text" id="name" placeholder="Name"required>
-        <input type="text" id="class" placeholder="Class" required>
-        <input type="number" id="marks" placeholder="Mobile" required>
-        <input type="text" id="mobile" placeholder="PRN" required>
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="text" id="address" placeholder="Address">
-        <input type="text" id="about" placeholder="About">
-        <button type="button" onclick="addStudent()">Add Student</button>
-    </form>
+        <div class="main-content" id="mainContent">
+            <div class="navbar">
+                <div class="navbar-brand">
+                    <i class="fas fa-graduation-cap"></i> Student Records
+                </div>
+                <div class="nav-links">
+                    <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Class</th>
-                <th>Mobile</th>
-                <th>PRN</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>About</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="studentTable"></tbody>
-    </table>
+            <div class="welcome-message" id="welcomeMessage">
+                <h2>Welcome, <span id="userName"></span>!</h2>
+            </div>
 
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <h2>Edit Student</h2>
-            <input type="hidden" id="editId">
-            <input type="text" id="editName" placeholder="Name">
-            <input type="text" id="editClass" placeholder="Class">
-            <input type="number" id="editMarks" placeholder="Mobile">
-            <input type="text" id="editMobile" placeholder="PRN">
-            <input type="email" id="editEmail" placeholder="Email">
-            <input type="text" id="editAddress" placeholder="Address">
-            <input type="text" id="editAbout" placeholder="About">
-            <button onclick="updateStudent()">Update</button>
-            <button onclick="document.getElementById('editModal').style.display='none'">Cancel</button>
+            <div class="action-buttons">
+                <button onclick="openAddModal()">
+                    <i class="fas fa-plus"></i> Add New Student
+                </button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Search by Name, Mobile, or Email">
+                <button onclick="searchStudent()"><i class="fas fa-search"></i> Search</button>
+            </div>
+
+            <div class="student-table">
+                <table id="studentTable">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Marks</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>About</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Add Student Form -->
+            <div id="addModal" class="modal">
+                <div class="modal-content">
+                    <h2>Add New Student</h2>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" placeholder="Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="class">Class</label>
+                        <input type="text" id="class" placeholder="Class" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="marks">Marks</label>
+                        <input type="number" id="marks" placeholder="Marks" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile">Mobile</label>
+                        <input type="text" id="mobile" placeholder="Mobile" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea id="address" placeholder="Address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="about">About</label>
+                        <textarea id="about" placeholder="About the student" required></textarea>
+                    </div>
+                    <button type="button" onclick="addStudent()">Add Student</button>
+                    <button type="button" onclick="closeAddModal()">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Edit Modal -->
+            <div id="editModal" class="modal">
+                <div class="modal-content">
+                    <h2>Edit Student</h2>
+                    <input type="hidden" id="editId">
+                    <div class="form-group">
+                        <label for="editName">Name</label>
+                        <input type="text" id="editName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editClass">Class</label>
+                        <input type="text" id="editClass" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMarks">Marks</label>
+                        <input type="number" id="editMarks" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMobile">Mobile</label>
+                        <input type="text" id="editMobile" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEmail">Email</label>
+                        <input type="email" id="editEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAddress">Address</label>
+                        <textarea id="editAddress" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAbout">About</label>
+                        <textarea id="editAbout" required></textarea>
+                    </div>
+                    <button onclick="updateStudent()">Update</button>
+                    <button onclick="closeEditModal()">Cancel</button>
+                </div>
+            </div>
         </div>
     </div>
-</center>
-    <script src="/script.js"></script>
+
+    <script>
+        // Authentication functions
+        document.addEventListener("DOMContentLoaded", () => {
+            checkAuthStatus();
+        });
+
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/check-auth', {
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('authContainer').style.display = 'none';
+                    document.getElementById('welcomeMessage').style.display = 'block';
+                    document.getElementById('userName').textContent = data.user.name;
+                    document.getElementById('mainContent').style.display = 'block';
+                    fetchStudents();
+                } else {
+                    document.getElementById('authContainer').style.display = 'block';
+                    document.getElementById('welcomeMessage').style.display = 'none';
+                    document.getElementById('mainContent').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+            }
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                alert('Please enter both email and password');
+                return;
+            }
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('authContainer').style.display = 'none';
+                    document.getElementById('welcomeMessage').style.display = 'block';
+                    document.getElementById('userName').textContent = data.user.name;
+                    document.getElementById('mainContent').style.display = 'block';
+                    fetchStudents();
+                } else {
+                    alert(data.message || 'Login failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Login failed. Please try again.');
+            }
+        }
+
+        async function handleSignup() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            if (!name || !email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            try {
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    showLoginForm();
+                    alert('Signup successful! Please login.');
+                } else {
+                    alert(data.message || 'Signup failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Signup failed. Please try again.');
+            }
+        }
+
+        function showSignupForm() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'block';
+        }
+
+        function showLoginForm() {
+            document.getElementById('signupForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        function logout() {
+            fetch('/logout', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(() => {
+                    document.getElementById('welcomeMessage').style.display = 'none';
+                    document.getElementById('mainContent').style.display = 'none';
+                    document.getElementById('authContainer').style.display = 'block';
+                    checkAuthStatus(); // Re-check auth status after logout
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Student management functions
+        async function fetchStudents() {
+            try {
+                const response = await fetch("/students", {
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Failed to fetch students');
+                }
+                
+                const studentTable = document.getElementById("studentTable");
+                studentTable.innerHTML = "";
+                
+                if (data.students.length === 0) {
+                    studentTable.innerHTML = '<tr><td colspan="10" style="text-align: center;">No students found</td></tr>';
+                    return;
+                }
+                
+                data.students.forEach((student, index) => {
+                    const row = `<tr>
+                        <td>${index + 1}</td>
+                        <td>${student.name}</td>
+                        <td>${student.class}</td>
+                        <td>${student.marks}</td>
+                        <td>${student.mobile}</td>
+                        <td>${student.email}</td>
+                        <td>${student.address}</td>
+                        <td>${student.about}</td>
+                        <td>
+                            <button onclick="openEditModal('${student._id}', '${student.name}', '${student.class}', '${student.marks}', '${student.mobile}', '${student.email}', '${student.address}', '${student.about}')">Edit</button>
+                            <button onclick="deleteStudent('${student._id}')">Delete</button>
+                            <button onclick="printStudent('${student._id}')">Print</button>
+                        </td>
+                    </tr>`;
+                    studentTable.innerHTML += row;
+                });
+            } catch (error) {
+                console.error('Error fetching students:', error);
+                alert('Error fetching students. Please try again.');
+            }
+        }
+
+        function openEditModal(id, name, studentClass, marks, mobile, email, address, about) {
+            document.getElementById("editId").value = id;
+            document.getElementById("editName").value = name;
+            document.getElementById("editClass").value = studentClass;
+            document.getElementById("editMarks").value = marks;
+            document.getElementById("editMobile").value = mobile;
+            document.getElementById("editEmail").value = email;
+            document.getElementById("editAddress").value = address;
+            document.getElementById("editAbout").value = about;
+            document.getElementById("editModal").style.display = "block";
+        }
+
+        function closeEditModal() {
+            document.getElementById("editModal").style.display = "none";
+        }
+
+        async function updateStudent() {
+            try {
+                const id = document.getElementById("editId").value;
+                const student = {
+                    name: document.getElementById("editName").value,
+                    class: document.getElementById("editClass").value,
+                    marks: document.getElementById("editMarks").value,
+                    mobile: document.getElementById("editMobile").value,
+                    email: document.getElementById("editEmail").value,
+                    address: document.getElementById("editAddress").value,
+                    about: document.getElementById("editAbout").value
+                };
+                
+                const response = await fetch(`/update/${id}`, {
+                    method: "PUT",
+                    credentials: 'include',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(student)
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Failed to update student');
+                }
+                
+                alert("Student Updated Successfully");
+                closeEditModal();
+                fetchStudents();
+            } catch (error) {
+                console.error('Error updating student:', error);
+                alert('Error updating student. Please try again.');
+            }
+        }
+
+        function openAddModal() {
+            document.getElementById("addModal").style.display = "block";
+        }
+
+        function closeAddModal() {
+            document.getElementById("addModal").style.display = "none";
+        }
+
+        async function addStudent() {
+            try {
+                const student = {
+                    name: document.getElementById("name").value,
+                    class: document.getElementById("class").value,
+                    marks: document.getElementById("marks").value,
+                    mobile: document.getElementById("mobile").value,
+                    email: document.getElementById("email").value,
+                    address: document.getElementById("address").value,
+                    about: document.getElementById("about").value
+                };
+                
+                const response = await fetch("/add", {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(student)
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Failed to add student');
+                }
+                
+                alert("Student Added Successfully");
+                fetchStudents();
+                
+                // Reset form
+                document.getElementById("name").value = "";
+                document.getElementById("class").value = "";
+                document.getElementById("marks").value = "";
+                document.getElementById("mobile").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("address").value = "";
+                document.getElementById("about").value = "";
+                
+                closeAddModal();
+            } catch (error) {
+                console.error('Error adding student:', error);
+                alert('Error adding student. Please try again.');
+            }
+        }
+
+        async function deleteStudent(id) {
+            if (confirm("Are you sure you want to delete this student?")) {
+                try {
+                    const response = await fetch(`/delete/${id}`, {
+                        method: "DELETE",
+                        credentials: 'include',
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    });
+                    const data = await response.json();
+                    
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.message || 'Failed to delete student');
+                    }
+                    
+                    alert("Student Deleted Successfully");
+                    fetchStudents();
+                } catch (error) {
+                    console.error('Error deleting student:', error);
+                    alert('Error deleting student. Please try again.');
+                }
+            }
+        }
+
+        async function searchStudent() {
+            try {
+                const query = document.getElementById("search").value;
+                const response = await fetch(`/search?q=${encodeURIComponent(query)}`, {
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'No students found');
+                }
+                
+                const studentTable = document.getElementById("studentTable");
+                studentTable.innerHTML = "";
+                
+                if (data.students.length === 0) {
+                    studentTable.innerHTML = '<tr><td colspan="10" style="text-align: center;">No students found</td></tr>';
+                    return;
+                }
+                
+                data.students.forEach((student, index) => {
+                    const row = `<tr>
+                        <td>${index + 1}</td>
+                        <td>${student.name}</td>
+                        <td>${student.class}</td>
+                        <td>${student.marks}</td>
+                        <td>${student.mobile}</td>
+                        <td>${student.email}</td>
+                        <td>${student.address}</td>
+                        <td>${student.about}</td>
+                        <td>
+                            <button onclick="openEditModal('${student._id}', '${student.name}', '${student.class}', '${student.marks}', '${student.mobile}', '${student.email}', '${student.address}', '${student.about}')">Edit</button>
+                            <button onclick="deleteStudent('${student._id}')">Delete</button>
+                            <button onclick="printStudent('${student._id}')">Print</button>
+                        </td>
+                    </tr>`;
+                    studentTable.innerHTML += row;
+                });
+            } catch (error) {
+                console.error('Error searching students:', error);
+                alert('Error searching students. Please try again.');
+            }
+        }
+
+        async function printStudent(id) {
+            try {
+                const response = await fetch(`/print/${id}`, {
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Failed to print student');
+                }
+                
+                // Create PDF using data
+                const doc = new PDFDocument();
+                const stream = doc.pipe(blobStream());
+                
+                // Add content to PDF
+                doc.fontSize(25).text('Student Report', { align: 'center' });
+                doc.moveDown();
+                
+                Object.entries(data.student).forEach(([key, value]) => {
+                    doc.text(`${key}: ${value}`);
+                });
+                
+                doc.end();
+                
+                stream.on('finish', () => {
+                    const blob = stream.toBlob('application/pdf');
+                    const url = URL.createObjectURL(blob);
+                    window.open(url, '_blank');
+                });
+            } catch (error) {
+                console.error('Error printing student:', error);
+                alert('Error printing student. Please try again.');
+            }
+        }
+    </script>
 </body>
 </html>
