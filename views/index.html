@@ -80,6 +80,27 @@
             color: var(--primary-color);
         }
 
+        /* Login Page Title */
+        .login-title {
+            text-align: center;
+            margin-bottom: 5px;
+            padding: 10px;
+        }
+
+        .login-title h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-title i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+        }
+
         /* Auth Container */
         .auth-container {
             min-height: 100vh;
@@ -452,6 +473,9 @@
 </head>
 <body>
     <div class="container">
+        <div class="login-title">
+            <h1><i class="fas fa-graduation-cap"></i> Student Records Management</h1>
+        </div>
         <center>
             <div id="authContainer" class="auth-container">
                 <div id="loginForm" class="auth-form">
